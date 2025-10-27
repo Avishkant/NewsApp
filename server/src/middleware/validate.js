@@ -16,6 +16,11 @@ const loginValidator = [
 const createNewsValidator = [
   check("title").trim().notEmpty().withMessage("Title is required"),
   check("content").trim().notEmpty().withMessage("Content is required"),
+  check("district").isMongoId().withMessage("District must be a valid id"),
+  check("link")
+    .optional()
+    .isURL({ require_protocol: true })
+    .withMessage("Link must be a valid URL (include http:// or https://)"),
 ];
 
 const updateNewsValidator = [
@@ -29,6 +34,15 @@ const updateNewsValidator = [
     .trim()
     .notEmpty()
     .withMessage("Content cannot be empty"),
+  check("district")
+    .optional()
+    .trim()
+    .notEmpty()
+    .withMessage("District cannot be empty"),
+  check("link")
+    .optional()
+    .isURL({ require_protocol: true })
+    .withMessage("Link must be a valid URL (include http:// or https://)"),
 ];
 
 function runValidation(req, res, next) {

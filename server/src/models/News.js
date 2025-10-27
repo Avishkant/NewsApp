@@ -5,6 +5,14 @@ const newsSchema = new mongoose.Schema({
   content: { type: String, required: true },
   image: { type: String },
   category: { type: mongoose.Schema.Types.ObjectId, ref: "Category" },
+  // district references canonical District collection (selected from dropdown)
+  district: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "District",
+    required: true,
+  },
+  // optional link (e.g., YouTube URL) to be displayed as hyperlink in frontend
+  link: { type: String },
   reporterId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",

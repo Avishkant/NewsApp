@@ -10,6 +10,7 @@ const authRoutes = require("./routes/authRoutes");
 const newsRoutes = require("./routes/newsRoutes");
 const ownerRoutes = require("./routes/ownerRoutes");
 const categoryRoutes = require("./routes/categoryRoutes");
+const districtRoutes = require("./routes/districtRoutes");
 const contactRoutes = require("./routes/contactRoutes");
 
 const app = express();
@@ -30,6 +31,7 @@ app.use("/api/auth", authRoutes);
 app.use("/api/news", newsRoutes);
 app.use("/api/reporters", ownerRoutes);
 app.use("/api/category", categoryRoutes);
+app.use("/api/districts", districtRoutes);
 app.use("/api/contact", contactRoutes);
 
 // Error handler (minimal)

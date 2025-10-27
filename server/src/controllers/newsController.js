@@ -2,13 +2,15 @@ const News = require("../models/News");
 
 async function createNews(req, res) {
   try {
-    const { title, content, image, category } = req.body;
+    const { title, content, image, category, district, link } = req.body;
     const reporterId = req.user._id;
     const news = await News.create({
       title,
       content,
       image,
       category,
+      district,
+      link,
       reporterId,
     });
     res.status(201).json(news);
@@ -19,7 +21,14 @@ async function createNews(req, res) {
 }
 
 async function getAllNews(req, res) {
-  const news = await News.find().populate("category reporterId", "name email");
+  const filter = {};
+  if (req.query.district) filter.district = req.query.district; // expects district id
+  // optional category filter
+  if (req.query.category) filter.category = req.query.category;
+  const news = await News.find(filter).populate(
+    "category reporterId district",
+    "name name"
+  );
   res.json(news);
 }
 
@@ -49,7 +58,18 @@ async function updateNews(req, res) {
       return res.status(403).json({ message: "Forbidden" });
     }
 
-    Object.assign(news, req.body);
+    // Only allow the expected fields to be updated to avoid accidental overwrites
+    const updatable = [
+      "title",
+      "content",
+      "image",
+      "category",
+      "district",
+      "link",
+    ];
+    updatable.forEach((k) => {
+      if (req.body[k] !== undefined) news[k] = req.body[k];
+    });
     await news.save();
     res.json(news);
   } catch (err) {
